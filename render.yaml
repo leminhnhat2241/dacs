@@ -1,12 +1,10 @@
 services:
   - type: web
-    name: aspnet-app
+    name: e-sport-service
     runtime: dotnet
     buildCommand: dotnet publish -c Release -o out
     startCommand: dotnet out/E_Sport.dll
-    env: 
+    env:
       - key: ASPNETCORE_URLS
         value: http://0.0.0.0:10000
-      - key: DOTNET_RUNNING_IN_CONTAINER
-        value: true
     plan: free
