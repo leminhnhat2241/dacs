@@ -1,0 +1,116 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<E_Sport.Models.ApplicationUser> UserManager
+
+@model IEnumerable<E_Sport.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Quản lý người dùng";
+    var currentAdminId = UserManager.GetUserId(User);
+}
+
+<h2 class="mb-4">👥 Quản lý Nhân viên & Khách hàng</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<table class="table table-bordered">
+    <thead class="table-light">
+        <tr>
+            <th>Email</th>
+            <th>Số điện thoại</th>
+            <th>Họ tên</th>
+            <th>Vai trò (Cập nhật)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            var roles = await UserManager.GetRolesAsync(user);
+            string currentRole = roles.FirstOrDefault() ?? "Chưa có";
+
+            <tr>
+                <td>@user.Email</td>
+                <td>@user.PhoneNumber</td>
+                <td>@user.FullName</td>
+                <td>
+                    @if (user.Id == currentAdminId)
+                    {
+                        <span class="badge @GetBadgeColor(currentRole)">@currentRole</span>
+                    }
+                    else
+                    {
+                        <form asp-action="UpdateRole" method="post" class="d-inline">
+                            <input type="hidden" name="userId" value="@user.Id" />
+
+                            <div class="dropdown">
+                                <button class=" badge btn-sm dropdown-toggle @GetBadgeColor(currentRole)" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    @currentRole
+                                </button>
+                                <ul class="dropdown-menu">
+                                    @{
+                                        var rolesList = new Dictionary<string, string>
+                            {
+                            { "Customer", "Khách hàng" },
+                            { "Employee", "Employee" },
+                            { "Product_Manager", "Quản lý sản phẩm" },
+                            { "Order_Manager", "Quản lý đơn hàng" },
+                            { "Customer_Service", "Chăm sóc khách hàng" },
+                            { "Admin", "Admin" }
+                            };
+
+                                        foreach (var role in rolesList)
+                                        {
+                                            if (role.Key != currentRole)
+                                            {
+                                                <li>
+                                                    <button type="submit" name="newRole" value="@role.Key" class="dropdown-item">
+                                                        <span class="badge @GetBadgeColor(role.Key)">@role.Value</span>
+                                                    </button>
+                                                </li>
+                                            }
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@functions {
+    public string GetBadgeColor(string role)
+    {
+        return role switch
+        {
+            "Admin" => "bg-danger",
+            "Customer" => "bg-primary",
+            "Employee" => "bg-success",
+            "Product_Manager" => "bg-info",
+            "Order_Manager" => "bg-warning text-dark",
+            "Customer_Service" => "bg-secondary",
+            _ => "bg-light text-dark"
+        };
+    }
+    public string GetRoleDisplayName(string role)
+    {
+        return role switch
+        {
+            "Admin" => "Quản trị viên",
+            "Customer" => "Khách hàng",
+            "Employee" => "Nhân viên",
+            "Product_Manager" => "QL Sản phẩm",
+            "Order_Manager" => "QL Đơn hàng",
+            "Customer_Service" => "CSKH",
+            _ => role
+        };
+    }
+}
+

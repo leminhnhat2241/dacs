@@ -1,0 +1,43 @@
+﻿@model IEnumerable<E_Sport.Models.FieldType>
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Loại sân";
+}
+
+<h2>Danh sách loại sân</h2>
+
+<a asp-action="Add" class="btn btn-primary mb-3">➕ Thêm loại sân</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên loại sân</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var field in Model)
+        {
+            <tr>
+                <td>@field.Id</td>
+                <td>@field.Name</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@field.Id" class="btn btn-sm btn-warning">Sửa</a>
+                    <form asp-action="DeleteConfirmed" asp-route-id="@field.Id" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">
+                            Xóa
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@* @section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+} *@

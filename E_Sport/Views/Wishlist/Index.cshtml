@@ -1,0 +1,44 @@
+﻿@model List<Product>
+
+<h2>Danh sách yêu thích</h2>
+
+@if (!Model.Any())
+{
+	<div class="alert alert-info">
+		Bạn chưa có yêu thích nào.
+	</div>
+}
+else{
+
+	<form id="clearWishlistForm" asp-controller="Wishlist" asp-action="ClearWishlist" method="post">
+		<button type="submit" class="btn btn-warning" onclick="return confirm('Bạn có chắc chắn xóa không?');">Xóa yêu thích</button>
+	</form>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Tên sản phẩm</th>
+				<th>Giá</th>
+				<th>Xóa yêu thích</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var product in Model)
+			{
+				<tr>
+					<td>
+						<a asp-action="Details" asp-controller="product" asp-route-id="@product.Id" style="text-decoration: none; color:black">@product.Name </a>
+					</td>
+					<td>@product.Price</td>
+					<td>
+						<form asp-controller="Wishlist" asp-action="RemoveFromWishlist" method="post">
+							<input type="hidden" name="productId" value="@product.Id" />
+							<button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+						</form>
+					</td>
+				</tr>
+			}
+		</tbody>
+
+	</table>
+}

@@ -1,0 +1,55 @@
+﻿<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">GIỎ HÀNG CỦA BẠN</h2>
+
+    @if (Model.Items != null && Model.Items.Count == 0)
+    {
+        <!-- Nếu giỏ hàng trống -->
+        <div class="alert alert-info text-center">
+            Không có sản phẩm nào trong giỏ hàng!
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Size</th>
+                        <th>Số lượng</th>
+                        <th>Giá</th>
+                        <th>Tổng giá</th>
+                        <th>Xóa sản phẩm</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td class="align-middle">@item.Name</td>
+                            <td class="align-middle">@item.Size</td>
+                            <td class="align-middle">@item.Quantity</td>
+                            <td class="align-middle">$@item.Price</td>
+                            <td class="align-middle fw-bold">$@(item.Price * item.Quantity)</td>
+                            <td class="align-middle">
+                                <a asp-action="RemoveFromCart" asp-route-productId="@item.ProductId" asp-route-size="@item.Size" class="btn btn-danger btn-sm">Xóa</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    <!-- Dù giỏ có rỗng hay không vẫn có nút Tiếp tục mua sắm -->
+    <div class="d-flex justify-content-center mt-4 gap-2">
+        <a asp-action="Index" asp-controller="Product" class="btn btn-secondary">Tiếp tục mua sắm</a>
+
+        @if (Model.Items != null && Model.Items.Count > 0)
+        {
+            <a asp-action="Checkout" asp-controller="ShoppingCart" class="btn btn-success">Thanh Toán</a>
+        }
+    </div>
+</div>

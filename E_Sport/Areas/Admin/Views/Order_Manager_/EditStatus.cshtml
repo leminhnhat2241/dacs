@@ -1,0 +1,23 @@
+﻿@model E_Sport.Models.Order
+
+@{
+    ViewData["Title"] = "Đổi trạng thái đơn hàng";
+}
+
+<h2>Đổi trạng thái đơn hàng</h2>
+
+<form asp-action="EditStatus" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="Status">Trạng thái</label>
+        <select asp-for="Status" class="form-control">
+            <option value="Pending">Đang chờ duyệt</option>
+            <option value="Approved">Đã duyệt</option>
+            <option value="Cancelled">Đã hủy</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">Lưu thay đổi</button>
+    <a asp-action="Index" class="btn btn-secondary mt-3">Quay lại</a>
+</form>

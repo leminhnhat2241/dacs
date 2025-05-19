@@ -1,0 +1,125 @@
+﻿@* @model E_Sport.Models.Product
+
+@{
+    ViewData["Title"] = "Add";
+    Layout = "~/Areas/Admin/Views/_AdminLayout.cshtml";
+}
+
+<h1>Thêm sản phẩm</h1>
+
+<h2>Hãy thêm sản phẩm mới</h2>
+<form asp-action="Add" method="post" enctype="multipart/form-data">
+	<div class="form-group">
+		<label asp-for="Name">Tên sản phẩm</label>
+		<input asp-for="Name" class="form-control" />
+		<span asp-validation-for="Name" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="Price">Giá</label>
+		<input asp-for="Price" class="form-control" />
+		<span asp-validation-for="Price" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="Description">Mô tả</label>
+<textarea asp-for="Description" class="form-control"></textarea>
+		<span asp-validation-for="Description" class="textdanger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="CategoryId">Loại</label>
+		<select asp-for="CategoryId" asp-items="ViewBag.Categories"
+				class="form-control"></select>
+	</div>
+	<div class="form-group">
+		<label asp-for="ImageUrl">Ảnh sản phẩm</label>
+		<input type="file" asp-for="ImageUrl" class="form-control" />
+	</div>
+	<button type="submit" class="btn btn-primary">Add</button>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+ *@
+
+ @model E_Sport.Models.Product
+
+
+
+@{
+	ViewData["Title"] = "Thêm sản phẩm";
+}
+
+<div class="container mt-4">
+	<div class="card shadow-lg">
+		<div class="card-header bg-primary text-white">
+			<h4 class="mb-0">Thêm sản phẩm mới</h4>
+		</div>
+		<div class="card-body">
+			@if (!ViewData.ModelState.IsValid)
+			{
+				<div class="alert alert-danger">
+					<ul>
+						@foreach (var state in ViewData.ModelState)
+						{
+							foreach (var error in state.Value.Errors)
+							{
+								<li><strong>@state.Key</strong>: @error.ErrorMessage</li>
+							}
+						}
+					</ul>
+				</div>
+			}
+
+			<form asp-action="Add" method="post" enctype="multipart/form-data">
+				<div class="mb-3">
+					<label asp-for="Name" class="form-label">Tên sản phẩm</label>
+					<input asp-for="Name" class="form-control" placeholder="Nhập tên sản phẩm" />
+					<span asp-validation-for="Name" class="text-danger"></span>
+				</div>
+				<div class="mb-3">
+					<label asp-for="Price" class="form-label">Giá</label>
+					<input asp-for="Price" class="form-control" placeholder="Nhập giá sản phẩm" />
+					<span asp-validation-for="Price" class="text-danger"></span>
+				</div>
+				<div class="mb-3">
+					<label asp-for="Description" class="form-label">Mô tả</label>
+					<textarea asp-for="Description" class="form-control" rows="3" placeholder="Nhập mô tả sản phẩm"></textarea>
+					<span asp-validation-for="Description" class="text-danger"></span>
+				</div>
+				<div class="mb-3">
+					<label asp-for="CategoryId" class="form-label">Nhãn hiệu</label>
+					<select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select">
+						<option value="">-- Chọn loại sản phẩm --</option>
+					</select>
+				</div>
+				<div class="mb-3">
+					<label asp-for="ImageUrl" class="form-label">Ảnh sản phẩm</label>
+					<input type="file" asp-for="ImageUrl" class="form-control" />
+				</div>
+				<div class="mb-3">
+					<label asp-for="FieldTypeId" class="form-label">Loại sân</label>
+					<select asp-for="FieldTypeId" asp-items="ViewBag.FieldTypes" class="form-select">
+						<option value="">-- Chọn loại sân --</option>
+					</select>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label">Nhập các size (phân cách bằng dấu phẩy):</label>
+					<input type="text" name="SizeInput" class="form-control" placeholder="Ví dụ: 38,39,40" />
+				</div>
+
+
+				<div class="d-flex justify-content-between">
+					<button type="submit" class="btn btn-success px-4">Thêm</button>
+					<a asp-action="Index" class="btn btn-secondary px-4">Quay lại</a>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

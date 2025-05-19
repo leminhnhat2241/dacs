@@ -1,0 +1,95 @@
+﻿
+@model E_Sport.Models.ViewModel.ProductDetailViewModel
+
+@{
+    ViewData["Title"] = Model.Product.Name;
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+
+<div class="container py-5">
+    <div class="row">
+        <!-- Product Images -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <img src="@Model.Product.ImageUrl" class="card-img-top" alt="@Model.Product.Name">
+                <div class="card-body">
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Details -->
+        <div class="col-md-6">
+            <h1 class="h2 mb-3">@Model.Product.Name</h1>
+            <div class="mb-3">
+                <span class="h4 me-2">$@Model.Product.Price</span>
+            </div>
+
+            <p class="mb-4">@Model.Product.Description</p>
+
+            <!-- Actions -->
+            <div class="d-grid gap-2">
+                <form asp-action="BuyNow" method="get">
+                    <input type="hidden" name="productId" value="@Model.Product.Id" />
+                    <button type="submit" class="btn btn-danger mt-3 w-100">Mua ngay</button>
+                </form>
+
+                <form asp-controller="Wishlist" asp-action="AddToWishlist" method="post">
+                    <input type="hidden" name="productId" value="@Model.Product.Id" />
+                    <button type="submit" class="btn btn-danger w-100">Add to Wishlist</button>
+                </form>
+            </div>
+            <form asp-action="AddToCart" asp-controller="ShoppingCart" method="post">
+                <input type="hidden" name="productId" value="@Model.Product.Id" />
+
+                <div class="form-group mb-3">
+                    <label for="size">Chọn size:</label>
+                    <select name="size" class="form-select">
+                        @foreach (var size in Model.AvailableSizes)
+                        {
+                            <option value="@size.Size">@size.Size</option>
+                        }
+                    </select>
+
+                </div>
+
+                <div class="mb-4">
+                    <div class="d-flex align-items-center">
+                        <label class="me-2">Số lượng:</label>
+                        <input type="number" id="quantityInput" name="quantity" value="1" min="1" class="form-control" style="width: 100px;">
+                    </div>
+                </div>
+
+
+                <button type="submit" class="btn btn-success">🛒 Thêm vào giỏ</button>
+            </form>
+
+            <!-- Additional Info -->
+            <div class="mt-4">
+                <div class="d-flex align-items-center mb-2">
+                    <i class="fas fa-truck text-primary me-2"></i>
+                    <span>Free shipping on orders over $50</span>
+                </div>
+                <div class="d-flex align-items-center mb-2">
+                    <i class="fas fa-undo text-primary me-2"></i>
+                    <span>30-day return policy</span>
+                </div>
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-shield-alt text-primary me-2"></i>
+                    <span>2-year warranty</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+
+<script>
+    function updateQuantity() {
+        var quantityValue = document.getElementById("quantityInput").value;
+        document.getElementById("hiddenQuantity").value = quantityValue;
+    }
+</script>

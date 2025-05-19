@@ -1,0 +1,189 @@
+﻿@* _LayoutAdmin.cshtml *@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+        /* Sidebar cố định bên trái */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #1c1c3c;
+            color: #b3b3cc;
+            padding-top: 20px;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px 20px;
+            border-bottom: 1px solid #333;
+            margin-bottom: 20px;
+        }
+
+            .sidebar-header h3 {
+                color: #4f74f9;
+                margin-bottom: 0;
+            }
+
+            .sidebar-header small {
+                color: #666699;
+                font-weight: 300;
+            }
+
+        .nav-link {
+            color: #b3b3cc;
+            padding: 12px 20px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .nav-link:hover,
+            .nav-link.active {
+                background-color: #3f43c7;
+                color: white;
+                border-radius: 8px;
+                text-decoration: none;
+            }
+
+        /* Container cho navbar + content */
+        .main-content-wrapper {
+            margin-left: 250px; /* cách sidebar */
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        /* Navbar nằm ngang kế bên sidebar */
+        .top-navbar {
+            height: 56px;
+            background-color: #343a40;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            flex-shrink: 0; /* không co lại */
+            box-shadow: 0 2px 4px rgb(0 0 0 / 0.1);
+        }
+
+            .top-navbar .page-title {
+                font-size: 1.25rem;
+                font-weight: 600;
+            }
+
+        .btn-logout {
+            color: white;
+            border: 1px solid transparent;
+            background: transparent;
+            cursor: pointer;
+        }
+
+            .btn-logout:hover {
+                color: #dc3545;
+                border-color: #dc3545;
+                background: transparent;
+            }
+
+        /* Nội dung chính nằm dưới navbar, chiếm phần còn lại */
+        .content-wrapper {
+            padding: 20px;
+            overflow-y: auto;
+            flex-grow: 1; /* chiếm hết chiều cao còn lại */
+            background-color: #f8f9fa;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3>NexusFlow</h3>
+            <small>Dashboard</small>
+        </div>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" href="@Url.Action("Index", "Dashboard")">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Index", "Order_Manager_")">
+                    <i class="fas fa-chart-bar"></i> Analytics
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Create", "Customer_Service_")">
+                    <i class="fas fa-users"></i> Customers
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Index", "Product")">
+                    <i class="fas fa-box"></i> Products
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Index", "Settings")">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="main-content-wrapper">
+        <nav class="top-navbar">
+            <div class="page-title">@ViewData["Title"]</div>
+            <form method="post" asp-controller="Account" asp-action="Logout" class="mb-0">
+                <button type="submit" class="btn btn-logout" title="Đăng xuất">
+                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                </button>
+            </form>
+        </nav>
+        <div class="content-wrapper">
+            @RenderBody()
+
+      @*           <!-- Zalo Chat -->
+                <div class="zalo-chat-widget"
+                     data-oaid="1433187922224007242"
+                     data-welcome-message="Xin chào! Bạn cần hỗ trợ gì?"
+                     data-autopopup="0"
+                     data-width=""
+                     data-height=""></div>
+                <script src="https://sp.zalo.me/plugins/sdk.js"></script>
+ *@
+            <div id="fb-root"></div>
+            <script async defer crossorigin="anonymous"
+                    src="https://www.facebook.com/sdk/xfbml.customerchat.js"></script>
+
+            <div class="fb-customerchat"
+                 attribution="setup_tool"
+                 page_id="61576307046216"
+                 theme_color="#0084ff"
+                 logged_in_greeting="Hi! How can we help you?"
+                 logged_out_greeting="Hi! How can we help you?">
+            </div>
+
+
+
+            <footer class="mt-5 text-muted text-center">
+                &copy; 2025 - Your Company Name
+            </footer>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+﻿@model E_Sport.ViewModels.CreateOrderViewModel
+
+@{
+    ViewData["Title"] = "Thêm đơn hàng cho khách";
+}
+
+<h2>Thêm đơn hàng cho khách</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label>Khách hàng</label>
+        <select asp-for="UserId" class="form-control">
+            <option value="">-- Chọn khách hàng --</option>
+            @foreach (var customer in ViewBag.Customers)
+            {
+                <option value="@customer.Id">@customer.FullName - @customer.Email</option>
+            }
+        </select>
+        <span asp-validation-for="UserId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mt-3">
+        <label>Địa chỉ giao hàng</label>
+        <input asp-for="ShippingAddress" class="form-control" />
+        <span asp-validation-for="ShippingAddress" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mt-3">
+        <label>Ghi chú</label>
+        <textarea asp-for="Notes" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group mt-3">
+        <label>Trạng thái đơn hàng</label>
+        <select asp-for="Status" class="form-control">
+            <option value="Pending">Đang chờ duyệt</option>
+            <option value="Approved">Đã duyệt</option>
+            <option value="Cancelled">Đã hủy</option>
+        </select>
+    </div>
+
+    <hr />
+
+    <h4>Danh sách sản phẩm</h4>
+
+    <div id="products-list">
+        <div class="form-inline mb-2">
+            <select name="OrderDetails[0].ProductId" class="form-control mr-2">
+                @foreach (var product in ViewBag.Products)
+                {
+                    <option value="@product.Id">@product.Name</option>
+                }
+            </select>
+            <input type="number" name="OrderDetails[0].Quantity" class="form-control" placeholder="Số lượng" min="1" value="1" />
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-secondary mt-2" onclick="addProduct()">Thêm sản phẩm</button>
+
+    <hr />
+    <button type="submit" class="btn btn-success mt-3">Tạo đơn hàng</button>
+    <a asp-action="Index" asp-controller="Product" class="btn btn-secondary mt-3">Quay lại</a>
+</form>
+
+@section Scripts {
+    <script>
+        var productIndex = 1;
+        function addProduct() {
+            var productsList = document.getElementById('products-list');
+            var newProduct = document.createElement('div');
+            newProduct.className = 'form-inline mb-2';
+            newProduct.innerHTML = `
+                <select name="OrderDetails[${productIndex}].ProductId" class="form-control mr-2">
+                    ${document.querySelector('select[name="OrderDetails[0].ProductId"]').innerHTML}
+                </select>
+                <input type="number" name="OrderDetails[${productIndex}].Quantity" class="form-control" placeholder="Số lượng" min="1" value="1" />
+            `;
+            productsList.appendChild(newProduct);
+            productIndex++;
+        }
+    </script>
+}
